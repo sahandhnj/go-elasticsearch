@@ -14,9 +14,13 @@ var (
 	reEsVersion = regexp.MustCompile(`elasticsearch\s+=\s+(\d+\.\d+\.\d+)`)
 )
 
-// EsVersion returns the Elasticsearch from Java property file, or an error.
+// EsVersion returns the Elasticsearch from environment variable, Java property file, or an error.
 //
 func EsVersion(fpath string) (string, error) {
+	if envEsVersion := os.Getenv("ELASTICSEARCH_VERSION"); envEsVersion != "" {
+		return envEsVersion, nil
+	}
+
 	basePath, err := basePathFromFilepath(fpath)
 	if err != nil {
 		return "", fmt.Errorf("EsVersion: %s", err)

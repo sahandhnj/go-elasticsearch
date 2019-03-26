@@ -545,6 +545,8 @@ func (g *Generator) genAction(a Action, skipBody ...bool) {
 				g.w("\t\t\t" + k + ": ")
 				// TODO: Handle comma separated strings as lists
 
+				fmt.Printf("%s: %#v\n", a.Request(), apiRegistry[a.Request()])
+				// fmt.Printf("%s: %#v\n", k, apiRegistry[a.Request()][k])
 				typ, ok := apiRegistry[a.Request()][k]
 				if !ok {
 					panic(fmt.Sprintf("%s.%s: field not found", a.Request(), k))

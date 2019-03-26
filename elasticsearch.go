@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/elastic/go-elasticsearch/esapi"
+	"github.com/elastic/go-elasticsearch/esapi/xpack"
 	"github.com/elastic/go-elasticsearch/estransport"
 	"github.com/elastic/go-elasticsearch/internal/version"
 )
@@ -34,8 +35,9 @@ type Config struct {
 // Client represents the Elasticsearch client.
 //
 type Client struct {
-	*esapi.API // Embeds the API methods
-	Transport  estransport.Interface
+	*esapi.API  // Embeds the API methods
+	*xpack.XAPI // Embeds the API methods
+	Transport   estransport.Interface
 }
 
 // NewDefaultClient creates a new client with default options.
@@ -86,7 +88,7 @@ func NewClient(cfg Config) (*Client, error) {
 		Transport: cfg.Transport,
 	})
 
-	return &Client{Transport: tp, API: esapi.New(tp)}, nil
+	return &Client{Transport: tp, API: esapi.New(tp), XAPI: xpack.New(tp)}, nil
 }
 
 // Perform delegates to Transport to execute a request and return a response.

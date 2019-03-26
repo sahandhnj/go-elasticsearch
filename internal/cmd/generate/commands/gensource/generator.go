@@ -537,6 +537,8 @@ func (r ` + g.Endpoint.MethodWithNamespace() + `Request) Do(ctx context.Context,
 								pathContent.WriteString(`		path.WriteString("/")` + "\n")
 								pathContent.WriteString(`		path.WriteString(strings.Join(r.` + p + `, ","))` + "\n")
 								pathContent.WriteString(`	}` + "\n")
+							case "int", "long":
+								pathContent.WriteString("// TODO: type int or long")
 							default:
 								panic(fmt.Sprintf("FAIL: %q: unexpected type %q for URL part %q\n", g.Endpoint.Name, a.Type, a.Name))
 							}

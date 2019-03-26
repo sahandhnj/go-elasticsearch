@@ -285,7 +285,8 @@ func (cmd *Command) processFile(f *os.File) (err error) {
 func (cmd *Command) processAPIConstructor(endpoints []*Endpoint) (err error) {
 	var b bytes.Buffer
 
-	var namespaces = []string{"Cat", "Cluster", "Indices", "Ingest", "Nodes", "Remote", "Snapshot", "Tasks"}
+	// var namespaces = []string{"Cat", "Cluster", "Indices", "Ingest", "Nodes", "Remote", "Snapshot", "Tasks"}
+	var namespaces = []string{"Ccr", "Ilm", "Indices", "License", "Migration", "Ml", "Monitoring", "Rollup", "Security", "Sql", "Ssl", "Watcher", "Xpack"}
 
 	b.WriteString("// Code generated")
 	if EsVersion != "" || GitCommit != "" || GitTag != "" {
@@ -317,8 +318,9 @@ type API struct {
 		skip := false
 		name := e.MethodWithNamespace()
 
+		// Skip APIs in namespace
 		for _, n := range namespaces {
-			if strings.HasPrefix(name, n) {
+			if strings.HasPrefix(strings.ToLower(name), strings.ToLower(n)) {
 				skip = true
 			}
 		}
@@ -352,7 +354,7 @@ func New(t Transport) *API {
 		name := e.MethodWithNamespace()
 
 		for _, n := range namespaces {
-			if strings.HasPrefix(name, n) {
+			if strings.HasPrefix(strings.ToLower(name), strings.ToLower(n)) {
 				skip = true
 			}
 		}
