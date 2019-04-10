@@ -22,11 +22,16 @@ const port = "9209"
 //
 type ExtendedClient struct {
 	*elasticsearch.Client
+	Custom *ExtendedAPI
+}
+
+type ExtendedAPI struct {
+	*elasticsearch.Client
 }
 
 // CatExample calls the custom REST API, "/_cat/example".
 //
-func (c *ExtendedClient) CatExample() (*esapi.Response, error) {
+func (c *ExtendedAPI) Example() (*esapi.Response, error) {
 	req, _ := http.NewRequest("GET", "/_cat/example", nil) // errcheck exclude
 
 	res, err := c.Perform(req)
@@ -56,7 +61,7 @@ func main() {
 		log.Fatalf("Error creating the client: %s", err)
 	}
 
-	es := ExtendedClient{esclient}
+	es := ExtendedClient{Client: esclient, Custom: &ExtendedAPI{esclient}}
 	<-signal
 
 	// --> Call a regular Elasticsearch API
@@ -65,7 +70,7 @@ func main() {
 
 	// --> Call a custom API
 	//
-	es.CatExample()
+	es.Custom.Example()
 }
 
 func launchServer(signal chan<- bool) {
